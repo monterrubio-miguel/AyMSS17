@@ -2,6 +2,6 @@
 
 int main()
 {
-    Hora hour;
-    hour.Time();
+    Hour* s = Hour::getInstance();
+    s -> Time();
 }
