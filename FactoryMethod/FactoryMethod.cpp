@@ -1,12 +1,40 @@
+#include<iostream>
+
+using namespace std;
+
+class Product
+{
+public:
+    virtual void SetUp() = 0;    
+};
+
+class Prod1 : public Product
+{
+public:
+    void SetUp()
+    {
+        cout << "Construcción del objeto complejo" << endl;
+    }
+};
+
+
 class FactoryMethod
 {
-    protected:
-        virtual Product* factoryMethod() = 0;
-    public:
-        static Product* create()
-        {
-            Product* p = factoryMethod();
-            p->SetUp();
-            return p;
-        }
+public:    
+    virtual Product* factoryMethod() = 0;
+public:  
 };
+
+class ConcreteFactoryOO : public FactoryMethod
+{
+public:
+    Product* factoryMethod()
+    {
+        return new Prod1;
+    }
+};
+
+int main()
+{
+    Product* p = ConcreteFactoryOO::factoryMethod();
+}
