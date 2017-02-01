@@ -13,13 +13,22 @@ protected:
 
 public:
     virtual void correr() = 0;
+    void doStuff(){std::cout << instance << std::endl;}
 
     template<class SubClase>
     static Personaje* factoryMethod()
     {
-        SubClase* subclase = new SubClase;
-        subclase->correr();
-        return subclase;
+        if(instance != 0)
+        {
+            return instance;
+        }
+        else
+        {
+            SubClase* subclase = new SubClase;
+            subclase->correr();
+            return subclase;
+        }
+        
     }
 };
 
@@ -70,9 +79,11 @@ Personaje* Personaje::instance = 0;
 
 int main()
 {
-    Personaje* pe = Personaje::factoryMethod<Principe>();
-    Personaje* v = Personaje::factoryMethod<Villano>();
-    Personaje* pa = Personaje::factoryMethod<Princesa>();
+    Personaje* pr1 = Personaje::factoryMethod<Principe>();
+    pe->doStuff();
+    
+    Personaje* pr2 = Personaje::factoryMethod<Principe>();
+    pa->doStuff();
 
 
     
