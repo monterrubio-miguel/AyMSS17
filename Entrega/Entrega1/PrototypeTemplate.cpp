@@ -3,22 +3,28 @@ using namespace std;
 
 class Personaje
 {
+protected:
+    Personaje()
+    {
+        instance = this;
+    }
+    
+    static Personaje* instance;
+
 public:
     virtual void correr() = 0;
-    virtual Personaje* clonar() = 0;
-};
 
-template <class SubClase>
-class ClonPersonaje : public Personaje
-{
-public:
-    virtual Personaje* clonar()
+    template<class SubClase>
+    static Personaje* factoryMethod()
     {
-        return new SubClase(dynamic_cast<SubClase&>(*this));    
+        SubClase* subclase = new SubClase;
+        subclase->correr();
+        return subclase;
     }
 };
 
-class Principe : public ClonPersonaje<Principe>
+
+class Principe : public Personaje
 {   
 public:
     void seleccionarArma();
@@ -29,7 +35,7 @@ public:
     }
 };
 
-class Princesa : public ClonPersonaje<Princesa>
+class Princesa : public Personaje
 {
 public:
     void gritar();
@@ -39,7 +45,7 @@ public:
     }
 };
 
-class Villano : public ClonPersonaje<Villano>
+class Villano : public Personaje
 {
 public:
     void atacar();
@@ -50,7 +56,7 @@ public:
     }
 };
 
-class VillanoVolador : public ClonPersonaje<VillanoVolador>
+class VillanoVolador : public Personaje
 {
 public:
     void correr()
@@ -59,14 +65,13 @@ public:
     }
 };
 
+Personaje* Personaje::instance = 0;
+
 int main()
 {
-    Villano v;
-    Princesa p;
-    Principe pri;
-    
-    Personaje* pe = v.clonar();
-    pe->correr();
+    Personaje* pe = Personaje::factoryMethod<Principe>();
+    Personaje* v = Personaje::factoryMethod<Villano>();
+    Personaje* pa = Personaje::factoryMethod<Princesa>();
     
     return 1;
 }
