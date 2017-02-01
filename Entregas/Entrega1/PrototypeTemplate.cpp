@@ -48,6 +48,7 @@ public:
 class Villano : public Personaje
 {
 public:
+    void doStuff(){std::cout << instance << std::endl;}
     void atacar();
     void atraparPricnesa();
     void correr()
@@ -72,6 +73,8 @@ int main()
     Personaje* pe = Personaje::factoryMethod<Principe>();
     Personaje* v = Personaje::factoryMethod<Villano>();
     Personaje* pa = Personaje::factoryMethod<Princesa>();
+
+
     
     return 1;
 }
