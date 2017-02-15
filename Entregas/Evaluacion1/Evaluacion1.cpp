@@ -97,7 +97,7 @@ public:
 		return;
 	}
 
-	static Videojuego* genero(int z);
+	static Videojuego* genero(std::string x, int y, int z);
 
 	/*template<class Tipo>
     static Videojuego* factoryMethod(std::string x, int y)
@@ -138,32 +138,34 @@ class aprendizaje : public Videojuego
 		}
 };
 
-Videojuego *Videojuego::genero(int z)
+Videojuego *Videojuego::genero(std::string x, int y, int z)
 {
-	switch(z)
-		{
-			case 1:
-				return new estrategia;
-				break;
+	if (z == 1)
+	{
+		Videojuego* tipo = new estrategia;
+		tipo->creacion(x, y);
+		return tipo;
+	}
 
-			case 2:
-				return new aventura;
-				break;
+	else if(z == 2)
+	{
+		Videojuego* tipo = new estrategia;
+		tipo->creacion(x, y);
+		return tipo;
+	}
 
-			case 3:
-				return new aprendizaje;
-				break;
-
-			default:
-				return new Videojuego;
-				break;
-		}
+	else
+	{
+		Videojuego* tipo = new estrategia;
+		tipo->creacion(x, y);
+		return tipo;
+	}
 }
 
 class Almacen
 {
 public:
-	std::vector<Videojuego*> Inventario;
+	std::vector<Videojuego*> inv;
 	std::queue<Videojuego*> undo;
 
 	Almacen()
@@ -195,38 +197,45 @@ public:
 		std::cout << std::endl << "Declarar precio del juego:";
 		std::cin >> y;
 		int i = 0;
+		Videojuego* vid;
 		do
 		{
 			std::cout << "Elegir género: " << std::endl << "1. Estrategia" << std::endl << "2. Aventura" << std::endl << "3. Aprendizaje" << std::endl << "0. Regresar al menú principal" << std::endl;
 			std::cin >> i;
-			Inventario.push_back(Videojuego::genero(i));
+			if((i == 1) || (i == 2) || (i == 3))
+			{
+				vid = Videojuego::genero(x, y, i);
+				inv.push_back(vid);
+				i=0;
+			}
+
+			
 			/*switch(i)
 			{
 				case 1:
-					//Inventario.push_back(Videojuego::factoryMethod<estrategia>(x,y));
+					//inv.push_back(Videojuego::factoryMethod<estrategia>(x,y));
 					Videojuego* vid = Videojuego::factoryMethod<estrategia>(x,y);
 					i=0;
 					break;
 
 				case 2:
-					Inventario.push_back(Videojuego::factoryMethod<aventura>(x,y));
+					inv.push_back(Videojuego::factoryMethod<aventura>(x,y));
 					i=0;
 					break;
 
 				case 3:
-					Inventario.push_back(Videojuego::factoryMethod<aprendizaje>(x,y));
+					inv.push_back(Videojuego::factoryMethod<aprendizaje>(x,y));
 					i=0;
 					break;
 
 				case 0:
 					std::cout << "Regresando al menú principal";
-					return;
 					break;
 				default:
 					std::cout << "Error. Intenta otra opción." << std::endl;
 					break;
 			}*/	
-		}while((i != 0) || (i != 1) || (i!= 2) || (i != 3));
+		}while((i != 0));
 		
 	}
 
@@ -267,9 +276,9 @@ public:
 					std::cout << "Introducir número de serie: ";
 					std::cin >> y;
 
-					for (int i = 0; i < Inventario.size(); i++)
+					for (int i = 0; i < inv.size(); i++)
 					{
-						if(y==Inventario[0]->serial)
+						if(y==inv[0]->serial)
 						{
 							return i;
 						}
@@ -312,9 +321,10 @@ void menu(Almacen& inv)
 {
 	int x = 1;
 	
-	std::cout << std::endl << "Elegir una opción" << std::endl << "1. Crear Videojuego y agregar al inventario" << std::endl << "2. Eliminar un videojuego" << std::endl << "3. Recuperar últimos 3 videojuegos eliminados" << std::endl << "4. Ordenar juegos" << std::endl << "5. Buscar juego por nombre o número de serie" << std::endl << "6. Imprimir número total de videojuegos en el inventario" << std::endl << "7. Imprimir lista de todos los videojuegos"  << std::endl << "0. Salir del programa" << std::endl;
+	
 	do
 	{
+		std::cout << std::endl << "Elegir una opción" << std::endl << "1. Crear Videojuego y agregar al inventario" << std::endl << "2. Eliminar un videojuego" << std::endl << "3. Recuperar últimos 3 videojuegos eliminados" << std::endl << "4. Ordenar juegos" << std::endl << "5. Buscar juego por nombre o número de serie" << std::endl << "6. Imprimir número total de videojuegos en el inventario" << std::endl << "7. Imprimir lista de todos los videojuegos"  << std::endl << "0. Salir del programa" << std::endl;
 		std::cin >> x;
 		switch(x)
 		{
@@ -364,7 +374,7 @@ void menu(Almacen& inv)
 				break;
 			
 		}
-	}while(!x != 0);
+	}while(x != 0);
 }
 
 int main()
