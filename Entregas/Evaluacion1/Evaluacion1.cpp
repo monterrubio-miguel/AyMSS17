@@ -97,15 +97,17 @@ public:
 		return;
 	}
 
-	static Videojuego* genero(std::string x, int y, int z);
+	
 
-	/*template<class Tipo>
+	template<class Tipo>
     static Videojuego* factoryMethod(std::string x, int y)
     {
         Tipo* tipo = new Tipo;
         tipo->creacion(x, y);
         return tipo;        
-    }*/
+    }
+    
+    //static Videojuego* genero(std::string x, int y, int z);
 };
 
 class estrategia : public Videojuego
@@ -138,7 +140,7 @@ class aprendizaje : public Videojuego
 		}
 };
 
-Videojuego *Videojuego::genero(std::string x, int y, int z)
+/*Videojuego *Videojuego::genero(std::string x, int y, int z)
 {
 	if (z == 1)
 	{
@@ -160,7 +162,7 @@ Videojuego *Videojuego::genero(std::string x, int y, int z)
 		tipo->creacion(x, y);
 		return tipo;
 	}
-}
+}*/
 
 class Almacen
 {
@@ -204,17 +206,16 @@ public:
 			std::cin >> i;
 			if((i == 1) || (i == 2) || (i == 3))
 			{
-				vid = Videojuego::genero(x, y, i);
-				inv.push_back(vid);
+				//vid = Videojuego::genero(x, y, i);
+				inv.push_back(Videojuego::genero(x, y, i));
 				i=0;
 			}
 
 			
-			/*switch(i)
+			switch(i)
 			{
 				case 1:
-					//inv.push_back(Videojuego::factoryMethod<estrategia>(x,y));
-					Videojuego* vid = Videojuego::factoryMethod<estrategia>(x,y);
+					inv.push_back(Videojuego::factoryMethod<estrategia>(x,y));
 					i=0;
 					break;
 
@@ -234,7 +235,7 @@ public:
 				default:
 					std::cout << "Error. Intenta otra opción." << std::endl;
 					break;
-			}*/	
+			}
 		}while((i != 0));
 		
 	}
@@ -278,7 +279,7 @@ public:
 
 					for (int i = 0; i < inv.size(); i++)
 					{
-						if(y==inv[0]->serial)
+						/*if(y==inv[0]->serial)
 						{
 							return i;
 						}
@@ -286,7 +287,7 @@ public:
 						else
 						{
 							return -1;
-						}
+						}*/
 					}
 
 					break;
