@@ -28,6 +28,11 @@ class DNS
             delegate();
         }
     }
+    
+    void delegate()
+    {
+        
+    }
 };
 
 class address
