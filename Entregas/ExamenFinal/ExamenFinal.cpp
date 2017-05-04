@@ -1,147 +1,264 @@
+//Miguel Monterrubio3
+//A01022153
+
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
-class Visitor;
-class GraphicElement
-{
-public:    
-    std::string type;
-    
-    void setType(std::string x)
-    {
-        type = x;
-    }
-    
-    string getType()
-    {
-        return type;
-    }
+class Asteroid;
+class Planet;
 
-    virtual GraphicElement* clonar() = 0;
-    //virtual void accept(Visitor*) = 0;
+class Spacecraft
+{
+public:
+    string type;
+    template<class T>
+    static Spacecraft* factoryMethod()
+    {
+        return T::getInstance();
+    }
+    template<class T>
+    void Collision(T* x);
+    
 };
 
-template <class Tipo>
-class Spacecraft : public GraphicElement
+class Exploration : public Spacecraft
 {
-public:    
-    virtual GraphicElement* clonar()
-    {
-        return new Tipo(dynamic_cast<Tipo&>(*this));    
-    }
-    
-    //void accept(Visitor*);
-
-}
-
-class PlanetExplorer : public Spacecraft<PlanetExplorer>
-{
-public:
-    PlanetExplorer()
+protected:
+    Exploration()
     {
         instance = this;
+        type = "Spacecraft: Planet Exploration Ship";
+        cout << endl << "Created " << type << endl;
     }
-    static Singleton* instance;
-}
 
-class Colonization : public Spacecraft<Colonization>
-{
+    static Exploration* instance;
+
 public:
+    static Exploration* getInstance()
+    {
+        static Exploration instance;
+        return &instance;
+    }
+    
+};
+
+Exploration* Exploration::instance = 0;
+
+class Colonization : public Spacecraft
+{
+protected:
     Colonization()
     {
         instance = this;
+        type = "Spacecraft: Colonization Ship";
+        cout << endl << "Created " << type << endl;
     }
-    static Singleton* instance;
-}
 
-class PlanetObservation : public Spacecraft<PlanetObservation>
-{
+    static Colonization* instance;
+
 public:
-    PlanetObservation()
+    static Colonization* getInstance()
+    {
+        static Colonization instance;
+        return &instance;
+    }
+   
+};
+
+Colonization* Colonization::instance = 0;
+
+class Observation : public Spacecraft
+{
+protected:
+    Observation()
     {
         instance = this;
+        type = "Spacecraft: Planet Observation Ship";
+        cout << endl << "Created " << type << endl;
     }
-    static Singleton* instance;
-}
 
-template <class Tipo>
-class Asteroid : public GraphicElement
-{
-public:    
-    virtual GraphicElement* clonar()
+    static Observation* instance;
+
+public:
+    static Observation* getInstance()
     {
-        return new Tipo(dynamic_cast<Tipo&>(*this));    
+        static Observation instance;
+        return &instance;
     }
     
-    //void accept(Visitor*);
+};
 
-}
+Observation* Observation::instance = 0;
 
-class Stony : public Asteroid<Stony>
+class Asteroid
 {
-public: 
+public:
+    string type;
+    template<class T>
+    static Asteroid* factoryMethod()
+    {
+        return T::getInstance();
+    }
+    template<class T>
+    void Collision(T* x);
+};
+
+class Stony : public Asteroid
+{
+protected:
     Stony()
     {
         instance = this;
+        type = "Asteroid: Stony Meteorite";
+        cout << endl << "Created " << type << endl;
     }
-    static Singleton* instance;
-}
 
-class Iron : public Asteroid<Iron>
-{
+    static Stony* instance;
+    
 public:
+    static Stony* getInstance()
+    {
+        static Stony instance;
+        return &instance;
+    }
+    
+};
+
+Stony* Stony::instance = 0;
+
+class Iron : public Asteroid
+{
+protected:
     Iron()
     {
         instance = this;
+        type = "Asteroid: Iron Meteorite";
+        cout << endl << "Created " << type << endl;
     }
-    static Singleton* instance;
-}
 
-template <class Tipo>
-class Planet : public GraphicElement
-{
-public:    
-    virtual GraphicElement* clonar()
+    static Iron* instance;
+    
+public:
+    static Iron* getInstance()
     {
-        return new Tipo(dynamic_cast<Tipo&>(*this));    
+        static Iron instance;
+        return &instance;
     }
     
-    //void accept(Visitor*);
+};
 
-}
+Iron* Iron::instance = 0;
 
-class Desert : public Planet<Desert>
+class Planet
 {
 public:
+    string type;
+    template<class T>
+    static Planet* factoryMethod()
+    {
+        return T::getInstance();
+    }
+};
+
+class Desert : public Planet
+{
+protected:
     Desert()
     {
         instance = this;
+        type = "Planet: Desert Planet";
+        cout << endl << "Created " << type << endl;
     }
-    static Singleton* instance;
-}
 
-class EarthAnalog : public Planet<EarthAnalog>
-{
+    static Desert* instance;
+    
 public:
+    static Desert* getInstance()
+    {
+        static Desert instance;
+        return &instance;
+    }
+    
+};
+
+Desert* Desert::instance = 0;
+
+class EarthAnalog : public Planet
+{
+protected:
     EarthAnalog()
     {
         instance = this;
+        type = "Planet: Earth Analog";
+        cout << endl << "Created " << type << endl;
     }
-    static Singleton* instance;
+
+    static EarthAnalog* instance;
+    
+public:
+    static EarthAnalog* getInstance()
+    {
+        static EarthAnalog instance;
+        return &instance;
+    }
+    
+};
+
+EarthAnalog* EarthAnalog::instance = 0;
+
+template<class T>
+void Spacecraft::Collision(T* x)
+{
+    cout << endl << type << " collided with " << x->type << endl;
 }
 
-/*class Visitor
+template<class T>
+void Asteroid::Collision(T* x)
 {
-public:
-    virtual void visit(Spacecraft*) = 0;
-    virtual void visit(Asteroid*) = 0;
-    virtual void visit(Planet*) = 0;
-};*/
+    cout << endl << type << " collided with " << x->type << endl;
+}
 
 int main()
 {
+    vector<Spacecraft*> Spacecrafts;
 
+    Spacecrafts.push_back(Spacecraft::factoryMethod<Exploration>());
+    Spacecrafts.push_back(Spacecraft::factoryMethod<Colonization>());
+    Spacecrafts.push_back(Spacecraft::factoryMethod<Observation>());
 
+    vector<Asteroid*> Asteroids;
+
+    Asteroids.push_back(Asteroid::factoryMethod<Stony>());
+    Asteroids.push_back(Asteroid::factoryMethod<Iron>());    
+
+    vector<Planet*> Planets;
+
+    Planets.push_back(Planet::factoryMethod<Desert>());
+    Planets.push_back(Planet::factoryMethod<EarthAnalog>());
+
+    cout << endl << endl;
+
+    for(int i = 0; i < Spacecrafts.size(); i++)
+    {
+        for(int j = 0; j < Asteroids.size(); j++)
+        {
+            Spacecrafts[i]->Collision(Asteroids[j]);
+        }
+
+        for(int k = 0; k < Planets.size(); k++)
+        {
+            Spacecrafts[i]->Collision(Planets[k]);
+        }
+    }
+
+    for(int i = 0; i < Asteroids.size(); i++)
+    {
+        for(int j = 0; j < Planets.size(); j++)
+        {
+            Asteroids[i]->Collision(Planets[j]);
+        }
+    }
 }
